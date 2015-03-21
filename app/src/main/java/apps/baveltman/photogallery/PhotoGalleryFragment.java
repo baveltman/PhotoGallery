@@ -48,7 +48,7 @@ public class PhotoGalleryFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                String result = new FlickerFetcher().getUrl("http://www.flickr.com");
+                String result = new FlickerFetcher().getUrl("http://www.android.com/");
                 Log.i(LOGGERTAG, "Fetched contents of URL: " + result);
             } catch (IOException ioe) {
                 Log.e(LOGGERTAG, "Failed to fetch URL: ", ioe);
