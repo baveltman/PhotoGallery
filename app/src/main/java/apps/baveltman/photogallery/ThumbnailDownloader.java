@@ -22,13 +22,16 @@ public class ThumbnailDownloader<Token> extends HandlerThread {
     private static final int MESSAGE_DOWNLOAD = 0;
 
     Handler mHandler;
+    Handler mResponseHandler;
+    Listener<Token> mListener;
 
     Map<Token, String> requestMap =
             Collections.synchronizedMap(new HashMap<Token, String>());
 
 
-    public ThumbnailDownloader() {
+    public ThumbnailDownloader(Handler responseHandler) {
         super(TAG);
+        mResponseHandler = responseHandler;
     }
 
     public void queueThumbnail(Token token, String url) {
@@ -69,8 +72,35 @@ public class ThumbnailDownloader<Token> extends HandlerThread {
                     .decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
             Log.i(TAG, "Bitmap created");
 
+            //pass message to main thread handler so that UI can be updated
+            mResponseHandler.post(new Runnable() {
+                public void run() {
+                    if (!requestMap.get(token).equals(url)) {
+                        return;
+                    }
+
+                    requestMap.remove(token);
+                    mListener.onThumbnailDownloaded(token, bitmap);
+                }
+            });
+
         } catch (IOException ioe) {
             Log.e(TAG, "Error downloading image", ioe);
         }
     }
+
+    public interface Listener<Token> {
+        void onThumbnailDownloaded(Token token, Bitmap thumbnail);
+    }
+
+    public void setListener(Listener<Token> listener) {
+        mListener = listener;
+    }
+
+    public void clearQueue() {
+        mHandler.removeMessages(MESSAGE_DOWNLOAD);
+        requestMap.clear();
+    }
+
+
 }

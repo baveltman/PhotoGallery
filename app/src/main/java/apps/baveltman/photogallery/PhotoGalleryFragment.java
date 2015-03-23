@@ -1,7 +1,9 @@
 package apps.baveltman.photogallery;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +36,16 @@ public class PhotoGalleryFragment extends Fragment {
         new FetchItemsTask().execute();
 
         //download images one at a time using a background thread
-        mThumbnailThread = new ThumbnailDownloader<ImageView>();
+        //pass that thread the main handler to allow it to handle messages from background thread
+        //set listener for desired messages
+        mThumbnailThread = new ThumbnailDownloader(new Handler());
+        mThumbnailThread.setListener(new ThumbnailDownloader.Listener<ImageView>(){
+            public void onThumbnailDownloaded(ImageView imageView, Bitmap thumbnail){
+                if (isVisible()) {
+                    imageView.setImageBitmap(thumbnail);
+                }
+            }
+        });
         mThumbnailThread.start();
         mThumbnailThread.getLooper();
         Log.i(LOGGERTAG, "Background thread started");
@@ -58,6 +69,12 @@ public class PhotoGalleryFragment extends Fragment {
         //destroy background thread
         mThumbnailThread.quit();
         Log.i(LOGGERTAG, "Background thread destroyed");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mThumbnailThread.clearQueue();
     }
 
     /**
