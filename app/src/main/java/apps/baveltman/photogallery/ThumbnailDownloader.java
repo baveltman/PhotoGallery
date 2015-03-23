@@ -75,7 +75,7 @@ public class ThumbnailDownloader<Token> extends HandlerThread {
             //pass message to main thread handler so that UI can be updated
             mResponseHandler.post(new Runnable() {
                 public void run() {
-                    if (!requestMap.get(token).equals(url)) {
+                    if (url == null || requestMap.get(token) != url) {
                         return;
                     }
 
