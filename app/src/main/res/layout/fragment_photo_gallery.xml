@@ -7,6 +7,7 @@
     android:numColumns="1"
     android:gravity="center"
     android:stretchMode="columnWidth"
+    android:background="#000000"
     android:id="@+id/photo_gridview">
 
 </GridView>

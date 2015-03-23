@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class ThumbnailDownloader<Token> extends HandlerThread {
 
     private static final String TAG = "ThumbnailDownloader";
     private static final int MESSAGE_DOWNLOAD = 0;
+    private static final int CACHE_SIZE = 4 * 1024 * 1024; // 4MiB
 
     Handler mHandler;
     Handler mResponseHandler;
@@ -28,10 +30,13 @@ public class ThumbnailDownloader<Token> extends HandlerThread {
     Map<Token, String> requestMap =
             Collections.synchronizedMap(new HashMap<Token, String>());
 
+    LruCache mCache;
+
 
     public ThumbnailDownloader(Handler responseHandler) {
         super(TAG);
         mResponseHandler = responseHandler;
+        mCache = new LruCache(CACHE_SIZE);
     }
 
     public void queueThumbnail(Token token, String url) {
@@ -66,7 +71,17 @@ public class ThumbnailDownloader<Token> extends HandlerThread {
                 return;
             }
 
-            byte[] bitmapBytes = new FlickerFetcher().getUrlBytes(url);
+            //check cache first before downloading
+            byte[] bitmapBytes;
+            byte[] bitmapBytesInCache = (byte[])mCache.get(url);
+
+            if (bitmapBytesInCache != null){
+                bitmapBytes = bitmapBytesInCache;
+            } else {
+                //not in cache, download from url
+                bitmapBytes = new FlickerFetcher().getUrlBytes(url);
+                mCache.put(url, bitmapBytes);
+            }
 
             final Bitmap bitmap = BitmapFactory
                     .decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
