@@ -24,7 +24,9 @@ public class FlickerFetcher {
     private static final String ENDPOINT = "https://api.flickr.com/services/rest/";
     private static final String API_KEY = "ddff3a61f833d31015b57ce80f300369";
     private static final String METHOD_GET_RECENT = "flickr.photos.getRecent";
+    private static final String METHOD_SEARCH = "flickr.photos.search";
     private static final String PARAM_EXTRAS = "extras";
+    private static final String PARAM_TEXT = "text";
     private static final String EXTRA_SMALL_URL = "url_s";
 
     private static final String XML_PHOTO = "photo";
@@ -73,16 +75,11 @@ public class FlickerFetcher {
      * creates request uri and executes api call in background thread
      * serializes response into ArrayList<GalleryItem>
      */
-    public ArrayList<GalleryItem> fetchItems() {
+    public ArrayList<GalleryItem> downloadGalleryItems(String url) {
+
         ArrayList<GalleryItem> items = new ArrayList<GalleryItem>();
 
         try {
-
-            String url = Uri.parse(ENDPOINT).buildUpon()
-                    .appendQueryParameter("method", METHOD_GET_RECENT)
-                    .appendQueryParameter("api_key", API_KEY)
-                    .appendQueryParameter("format", "rest")
-                    .appendQueryParameter(PARAM_EXTRAS, EXTRA_SMALL_URL).build().toString();
 
             //make api call and get response
             String xmlString = getUrl(url);
@@ -130,6 +127,33 @@ public class FlickerFetcher {
 
             eventType = parser.next();
         }
+    }
+
+    /**
+     * @return serealized response from flickr.photos.getRecent
+     */
+    public ArrayList<GalleryItem> fetchItems() {
+        // Move code here from above
+        String url = Uri.parse(ENDPOINT).buildUpon()
+                .appendQueryParameter("method", METHOD_GET_RECENT)
+                .appendQueryParameter("api_key", API_KEY)
+                .appendQueryParameter(PARAM_EXTRAS, EXTRA_SMALL_URL)
+                .build().toString();
+        return downloadGalleryItems(url);
+    }
+
+    /**
+     * @param query the text to be searched for
+     * @return serealized response from flickr.photos.search
+     */
+    public ArrayList<GalleryItem> search(String query) {
+        String url = Uri.parse(ENDPOINT).buildUpon()
+                .appendQueryParameter("method", METHOD_SEARCH)
+                .appendQueryParameter("api_key", API_KEY)
+                .appendQueryParameter(PARAM_EXTRAS, EXTRA_SMALL_URL)
+                .appendQueryParameter(PARAM_TEXT, query)
+                .build().toString();
+        return downloadGalleryItems(url);
     }
 
 }
