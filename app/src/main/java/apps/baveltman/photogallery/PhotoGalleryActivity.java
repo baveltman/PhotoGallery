@@ -2,6 +2,7 @@ package apps.baveltman.photogallery;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -28,6 +29,12 @@ public class PhotoGalleryActivity extends SingleFragmentActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.i(TAG, "Received a new search query: " + query);
+
+            //store query value in shared preferences
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit()
+                    .putString(FlickerFetcher.PREF_SEARCH_QUERY, query)
+                    .commit();
         }
 
         fragment.updateItems();

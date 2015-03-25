@@ -1,9 +1,11 @@
 package apps.baveltman.photogallery;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -111,7 +113,14 @@ public class PhotoGalleryFragment extends Fragment {
 
         @Override
         protected ArrayList<GalleryItem> doInBackground(Void... params) {
-            String query = "android"; // Just for testing
+            Activity activity = getActivity();
+
+            if (activity == null)
+                return new ArrayList<GalleryItem>();
+
+            //get query from shared prefs
+            String query = PreferenceManager.getDefaultSharedPreferences(activity).getString(FlickerFetcher.PREF_SEARCH_QUERY, null);
+
             if (query != null) {
                 return new FlickerFetcher().search(query);
             } else {
@@ -172,6 +181,12 @@ public class PhotoGalleryFragment extends Fragment {
                 getActivity().onSearchRequested();
                 return true;
             case R.id.menu_item_clear:
+                //clear out shared prefs to erase query and update
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .putString(FlickerFetcher.PREF_SEARCH_QUERY, null)
+                        .commit();
+                updateItems();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

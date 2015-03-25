@@ -31,6 +31,8 @@ public class FlickerFetcher {
 
     private static final String XML_PHOTO = "photo";
 
+    public static final String PREF_SEARCH_QUERY = "searchQuery";
+
     /**
      * fetches raw data from a url and returns the data as a byte array
      */
