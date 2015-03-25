@@ -38,8 +38,7 @@ public class PhotoGalleryFragment extends Fragment {
         //add options menu
         setHasOptionsMenu(true);
 
-        //call on nested class to act in a background thread via async task
-        new FetchItemsTask().execute();
+        updateItems();
 
         //download images one at a time using a background thread
         //pass that thread the main handler to allow it to handle messages from background thread
@@ -55,6 +54,14 @@ public class PhotoGalleryFragment extends Fragment {
         mThumbnailThread.start();
         mThumbnailThread.getLooper();
         Log.i(LOGGERTAG, "Background thread started");
+    }
+
+    /**
+     * use Async task to get data from flickr
+     */
+    public void updateItems() {
+        //call on nested class to act in a background thread via async task
+        new FetchItemsTask().execute();
     }
 
     @Override
