@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -47,6 +48,10 @@ public class PhotoGalleryFragment extends Fragment {
         setHasOptionsMenu(true);
 
         updateItems();
+
+        //send command to background service
+        Intent i = new Intent(getActivity(), PollService.class);
+        getActivity().startService(i);
 
         //download images one at a time using a background thread
         //pass that thread the main handler to allow it to handle messages from background thread
