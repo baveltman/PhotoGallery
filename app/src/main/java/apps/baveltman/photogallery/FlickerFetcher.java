@@ -1,6 +1,7 @@
 package apps.baveltman.photogallery;
 
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -32,6 +33,7 @@ public class FlickerFetcher {
     private static final String XML_PHOTO = "photo";
 
     public static final String PREF_SEARCH_QUERY = "searchQuery";
+    public static final String PREF_LAST_RESULT_ID = "lastResultId";
 
     /**
      * fetches raw data from a url and returns the data as a byte array

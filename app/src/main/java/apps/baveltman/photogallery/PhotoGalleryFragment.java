@@ -49,9 +49,8 @@ public class PhotoGalleryFragment extends Fragment {
 
         updateItems();
 
-        //send command to background service
-        Intent i = new Intent(getActivity(), PollService.class);
-        getActivity().startService(i);
+        //send command to background service to start alarm
+        PollService.setServiceAlarm(getActivity(), true);
 
         //download images one at a time using a background thread
         //pass that thread the main handler to allow it to handle messages from background thread
@@ -170,6 +169,15 @@ public class PhotoGalleryFragment extends Fragment {
             imageView.setImageResource(R.drawable.media_image_placeholder);
 
             GalleryItem item = getItem(position);
+
+            if (position == 0){
+                //save id of first item in shared prefs
+                PreferenceManager.getDefaultSharedPreferences(getActivity())
+                        .edit()
+                        .putString(FlickerFetcher.PREF_LAST_RESULT_ID, item.getId())
+                        .commit();
+            }
+
             mThumbnailThread.queueThumbnail(imageView, item.getUrl());
 
             return convertView;
