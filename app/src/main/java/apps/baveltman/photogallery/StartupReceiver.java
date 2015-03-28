@@ -8,7 +8,7 @@ import android.util.Log;
 /**
  * Broadcast reciever to wake the app on boot
  */
-public class StartupReciever extends BroadcastReceiver {
+public class StartupReceiver extends BroadcastReceiver {
 
     private static final String TAG = "StartupReceiver";
 
