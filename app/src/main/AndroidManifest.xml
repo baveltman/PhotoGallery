@@ -15,6 +15,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name=".PhotoGalleryActivity"
             android:label="@string/app_name"
@@ -34,11 +35,17 @@
                 android:name="android.app.default_searchable"
                 android:value=".PhotoGalleryActivity" />
         </activity>
+
+        <activity
+            android:name=".PhotoPageActivity" />
+
         <service android:name=".PollService" />
+
         <receiver android:name=".StartupReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/> </intent-filter>
         </receiver>
+
         <receiver android:name=".NotificationReceiver"
             android:exported="false">
             <intent-filter
@@ -47,6 +54,7 @@
                     android:name="apps.baveltman.photogallery.SHOW_NOTIFICATION"/>
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

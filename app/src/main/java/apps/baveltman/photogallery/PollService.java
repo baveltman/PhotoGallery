@@ -32,7 +32,7 @@ public class PollService extends IntentService {
     public static final String PERM_PRIVATE =
             "apps.baveltman.photogallery.PRIVATE";
 
-    private static final int POLL_INTERVAL = 1000  * 5; // 5 minutes
+    private static final int POLL_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
     public PollService() {
         super(TAG);
