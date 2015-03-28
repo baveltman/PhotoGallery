@@ -24,6 +24,8 @@ public class PollService extends IntentService {
 
     private static final String TAG = "PollService";
 
+    public static final String PREF_IS_ALARM_ON = "isAlarmOn";
+
     private static final int POLL_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
     public PollService() {
@@ -103,6 +105,12 @@ public class PollService extends IntentService {
             alarmManager.cancel(pi);
             pi.cancel();
         }
+
+        //set shared pref to store whether poll service alarm is on
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        prefs.edit()
+                .putBoolean(PollService.PREF_IS_ALARM_ON, isOn)
+                .commit();
     }
 
     public boolean isNetworkAvailable(){
