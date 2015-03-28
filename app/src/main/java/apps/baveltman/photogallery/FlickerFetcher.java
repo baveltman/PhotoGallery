@@ -119,11 +119,13 @@ public class FlickerFetcher {
                     XML_PHOTO.equals(parser.getName())) {
 
                 String id = parser.getAttributeValue(null, "id");
+                String owner = parser.getAttributeValue(null, "owner");
                 String caption = parser.getAttributeValue(null, "title");
                 String smallUrl = parser.getAttributeValue(null, EXTRA_SMALL_URL);
 
                 GalleryItem item = new GalleryItem();
                 item.setId(id);
+                item.setOwner(owner);
                 item.setCaption(caption);
                 item.setUrl(smallUrl);
                 items.add(item);
