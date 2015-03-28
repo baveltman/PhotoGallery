@@ -26,7 +26,13 @@ public class PollService extends IntentService {
 
     public static final String PREF_IS_ALARM_ON = "isAlarmOn";
 
-    private static final int POLL_INTERVAL = 1000 * 60 * 5; // 5 minutes
+    public static final String ACTION_SHOW_NOTIFICATION =
+            "apps.baveltman.photogallery.SHOW_NOTIFICATION";
+
+    public static final String PERM_PRIVATE =
+            "apps.baveltman.photogallery.PRIVATE";
+
+    private static final int POLL_INTERVAL = 1000  * 5; // 5 minutes
 
     public PollService() {
         super(TAG);
@@ -86,6 +92,9 @@ public class PollService extends IntentService {
         NotificationManager notificationManager = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(0, notification);
+
+        //sending broadcast to private dynamic reciever
+        sendBroadcast(new Intent(ACTION_SHOW_NOTIFICATION), PERM_PRIVATE);
     }
 
     /**

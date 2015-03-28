@@ -32,7 +32,7 @@ import java.util.ArrayList;
 /**
  * Created by borisvelt on 3/20/15.
  */
-public class PhotoGalleryFragment extends Fragment {
+public class PhotoGalleryFragment extends VisibleFragment {
 
     private static final String LOGGERTAG = "PhotoGalleryFragment";
 
