@@ -3,12 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
+    <ProgressBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/photo_progressBar"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleHorizontal"/>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_above="@id/photo_progressBar"
+        android:id="@+id/photo_textView"
+        />
+
+    
     <WebView
         android:id="@+id/photo_webview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true">
+        android:layout_above="@id/photo_textView">
     </WebView>
 
 </RelativeLayout>
