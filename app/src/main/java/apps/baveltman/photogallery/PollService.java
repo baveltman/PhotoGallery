@@ -89,12 +89,15 @@ public class PollService extends IntentService {
                 .setAutoCancel(true)
                 .build();
 
-        NotificationManager notificationManager = (NotificationManager)
-                getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notification);
+        showBackgroundNotification(0, notification);
+    }
 
-        //sending broadcast to private dynamic reciever
-        sendBroadcast(new Intent(ACTION_SHOW_NOTIFICATION), PERM_PRIVATE);
+    void showBackgroundNotification(int requestCode, Notification notification){
+        Intent i = new Intent(ACTION_SHOW_NOTIFICATION);
+        i.putExtra("REQUEST_CODE", requestCode);
+        i.putExtra("NOTIFICATION", notification);
+        sendOrderedBroadcast(i, PERM_PRIVATE, null, null,
+                         Activity.RESULT_OK, null, null);
     }
 
     /**
